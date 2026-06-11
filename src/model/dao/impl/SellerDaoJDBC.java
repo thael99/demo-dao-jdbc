@@ -51,17 +51,9 @@ public class SellerDaoJDBC implements SellerDao{
 			/*o objeto rs inicia na posição 0 e a primeira posição que tem alguma coisa é a posição 1
 			 * então se o rs.next() não tem nada, é pq o resultado da consulta foi nulo*/
 			if (rs.next()) {
-				Department dep = new Department ();
-				dep.setId(rs.getInt("DepartmentId")); //nome da coluna que eu quero
-				dep.setName(rs.getString("DepName")); //nome da coluna que eu quero
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep);
-				return obj;
+				Department dep = instantiateDepartment(rs);
+				Seller seller = instantiateSeller (rs, dep);
+				return seller;
 			}
 			return null;
 		}
@@ -78,6 +70,26 @@ public class SellerDaoJDBC implements SellerDao{
 		
 	}
 
+	private Department instantiateDepartment(ResultSet rs) throws SQLException{
+		Department dep = new Department ();
+		dep.setId(rs.getInt("DepartmentId")); //nome da coluna que eu quero
+		dep.setName(rs.getString("DepName")); //nome da coluna que eu quero
+		return dep;
+	}
+	
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException{
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep);
+		return obj;
+	}
+
+	
+	
 	@Override
 	public List<Seller> findAll() {
 		// TODO Auto-generated method stub
