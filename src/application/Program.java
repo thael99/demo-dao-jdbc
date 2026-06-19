@@ -43,6 +43,7 @@ public class Program {
 		sellerDao.deleteById(idToDelete);
 		System.out.println("deleted completed");
 		
+		sc.close();
 	}
 
 }
